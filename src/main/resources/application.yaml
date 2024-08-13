@@ -1,1 +1,1 @@
-jdbcUrl: "jdbc:h2:mem:bd"
+jdbcUrl: "jdbc:h2:mem:bd;DB_CLOSE_DELAY=-1"
