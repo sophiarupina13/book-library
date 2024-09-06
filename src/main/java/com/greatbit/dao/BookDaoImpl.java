@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 @Component
 public class BookDaoImpl implements BookDao {
@@ -19,6 +18,7 @@ public class BookDaoImpl implements BookDao {
     public BookDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
+
 
     @Override
     public List<Book> findAll() {

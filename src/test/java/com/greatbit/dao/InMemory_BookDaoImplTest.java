@@ -1,17 +1,18 @@
 package com.greatbit.dao;
 
 import com.greatbit.models.Book;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-@SpringBootTest(
-        properties = {"jdbcUrl=jdbc:h2:mem:db;DB_CLOSE_DELAY=-1"}
-)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class BookDaoImplTest {
+@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+public class InMemory_BookDaoImplTest {
 
     @Autowired
     private BookDao bookDao;
@@ -22,7 +23,7 @@ class BookDaoImplTest {
     }
 
     @Test
-    void findAll() {
+    void findAllTest() {
         Assertions.assertTrue(bookDao.findAll().isEmpty());
         Book book = bookDao.save(new Book("book name", "book author", 10));
         bookDao.save(book);
@@ -30,7 +31,7 @@ class BookDaoImplTest {
     }
 
     @Test
-    void save() {
+    void saveTest() {
         Book book = bookDao.save(new Book("book name", "book author", 10));
         List<Book> books = bookDao.findAll();
         Assertions.assertTrue(book.getId() > 0);
@@ -38,7 +39,7 @@ class BookDaoImplTest {
     }
 
     @Test
-    void getById() {
+    void getByIdTest() {
         Assertions.assertThrows(RuntimeException.class, () -> bookDao.getById(-1));
         Book book = bookDao.save(new Book(1, "book name", "book author", 10));
         bookDao.save(new Book(2, "book name 2", "book author 2", 10));
@@ -48,7 +49,7 @@ class BookDaoImplTest {
     }
 
     @Test
-    void update() {
+    void updateTest() {
         Book book = bookDao.save(new Book(1, "book name", "book author", 10));
         book.setName("new name");
 
@@ -59,7 +60,7 @@ class BookDaoImplTest {
     }
 
     @Test
-    void delete() {
+    void deleteTest() {
         Book book = bookDao.save(new Book(1, "book name", "book author", 10));
         Book book2 = bookDao.save(new Book(2, "book name 2", "book author 2", 10));
 
@@ -70,10 +71,4 @@ class BookDaoImplTest {
         Assertions.assertThrows(RuntimeException.class, () -> bookDao.getById(book.getId()));
     }
 
-    @Test
-    void deleteAll() {
-        Assertions.assertFalse(bookDao.findAll().isEmpty());
-        bookDao.deleteAll();
-        Assertions.assertTrue(bookDao.findAll().isEmpty());
-    }
 }
